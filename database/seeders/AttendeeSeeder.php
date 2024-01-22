@@ -16,6 +16,7 @@ class AttendeeSeeder extends Seeder
 
         $users = \App\Models\User::all();
         $events = \App\Models\Event::all();
+        
         foreach ($users as $user) {
             $eventsToAttend =  $events->random(rand(1,3));
 
