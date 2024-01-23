@@ -15,13 +15,38 @@ class EventController extends Controller
     public function index()
     {
         //
-        return  EventResource::collection(Event::with('user')->paginate(10));
+        $query = Event::query();
+        //To disable any Relation, just remove it from the array
+        $relations = ['user','attendees','attendees.user'];
+
+        foreach ($relations as $relation) {
+            $query->when(
+                $this->shouldIncludeRelation($relation),
+                fn($q) => $q->with($relation)
+            );
+        }
+
+        $this->shouldIncludeRelation('user');
+        return  EventResource::collection(
+            $query->latest()->paginate(10)
+        );
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    
+    protected function shouldIncludeRelation(string $relation): bool{
+        
+        $include =  request()->query('include');
+        if(!$include){
+            return false;
+        }
+
+        $relations = array_map('trim',explode(',', $include));
+
+        //dd($relations);
+        return in_array($relation, $relations);
+    }
      public function store(Request $request)
      {
          $event = Event::create([
