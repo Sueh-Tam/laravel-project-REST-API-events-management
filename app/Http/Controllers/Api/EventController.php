@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EventResource;
+use App\Http\Traits\CanLoadRelationShips;
 use App\Models\Event;
 use Illuminate\Http\Request;
 
@@ -12,19 +13,18 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      */
+    use CanLoadRelationShips;
+    private  $relations = ['user','attendees','attendees.user'];
     public function index()
     {
         //
         $query = Event::query();
+        $query = $this->loadRelationShips(Event::query());
+        
         //To disable any Relation, just remove it from the array
-        $relations = ['user','attendees','attendees.user'];
+        
 
-        foreach ($relations as $relation) {
-            $query->when(
-                $this->shouldIncludeRelation($relation),
-                fn($q) => $q->with($relation)
-            );
-        }
+        
 
         $this->shouldIncludeRelation('user');
         return  EventResource::collection(
@@ -59,7 +59,7 @@ class EventController extends Controller
              'user_id' => 1
          ]);
  
-         return new EventResource($event);
+         return new EventResource($this->loadRelationShips($event));
      }
 
     /**
@@ -68,8 +68,8 @@ class EventController extends Controller
     public function show(Event $event)
     {
         //
-        $event->load('user','attendees');
-        return new EventResource($event);
+        
+        return new EventResource($this->loadRelationShips($event));
     }
 
     /**
@@ -85,7 +85,7 @@ class EventController extends Controller
                 'end_time' => 'sometimes|date|after:start_time'
             ])
         );
-        return $event;
+        return new EventResource($this->loadRelationShips($event));
     }
 
     /**
