@@ -7,6 +7,7 @@ use App\Http\Resources\EventResource;
 use App\Http\Traits\CanLoadRelationShips;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class EventController extends Controller
 {
@@ -14,10 +15,11 @@ class EventController extends Controller
      * Display a listing of the resource.
      */
     use CanLoadRelationShips;
-    private  $relations = ['user','attendees','attendees.user'];
+    private array $relations = ['user', 'attendees', 'attendees.user'];
 
-    public function __construct(){
-        $this->middleware('auth:sanctum', ['except'=> ['index','show']]);
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except(['index', 'show']);
     }
 
     public function index()
@@ -27,9 +29,6 @@ class EventController extends Controller
         $query = $this->loadRelationShips(Event::query());
         
         //To disable any Relation, just remove it from the array
-        
-
-        
 
         $this->shouldIncludeRelation('user');
         return  EventResource::collection(
@@ -74,7 +73,9 @@ class EventController extends Controller
     {
         //
         
-        return new EventResource($this->loadRelationShips($event));
+        return new EventResource(
+            $this->loadRelationships($event)
+        );
     }
 
     /**
@@ -82,6 +83,14 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
+        /*
+        if(Gate::denies('update-event',$event)){
+           abort(403,'You are not allowed to update this Event.');
+        }
+        */
+
+        $this->authorize('update-event', $event);
+
         $event->update(
             $request->validate([
                 'name' => 'sometimes|string|max:255',
