@@ -15,13 +15,14 @@ class AttendeeController extends Controller
      * Display a listing of the resource.
      */
     use CanLoadRelationShips;
-    private array $relation = ['user'];
+    private array $relations = ['user'];
     public function index(Event $event)
     {
         //
         $attendees = $this->loadRelationships(
             $event->attendees()->latest()
         );
+
 
         return AttendeeResource::collection(
             $attendees->paginate(10)
@@ -34,10 +35,9 @@ class AttendeeController extends Controller
     public function store(Request $request, Event $event)
     {
         //
-        $attendee = $this->loadRelationShips(
+        $attendee = $this->loadRelationships(
             $event->attendees()->create([
-                'user_id' => 1,
-
+                'user_id' => 1
             ])
         );
 
@@ -51,7 +51,7 @@ class AttendeeController extends Controller
     {
         //
         return new AttendeeResource(
-            $this->loadRelationShips($attendee)
+            $this->loadRelationships($attendee)
         );
     }
 
