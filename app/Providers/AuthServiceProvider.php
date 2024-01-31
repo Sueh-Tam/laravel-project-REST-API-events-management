@@ -23,6 +23,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        /*
         //
         Gate::define('update-event', function ($user, Event $event) {
             return $user->id === $event->user_id;
@@ -32,5 +33,6 @@ class AuthServiceProvider extends ServiceProvider
             return $user->id === $event->user_id || 
             $user->id === $attendee->user_id;
         });
+        */
     }
 }
