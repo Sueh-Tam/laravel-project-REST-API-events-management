@@ -23,7 +23,7 @@ trait CanLoadRelationShips{
     }
 
     protected function shouldIncludeRelation(string $relation): bool{
-        
+
         $include =  request()->query('include');
         if(!$include){
             return false;
