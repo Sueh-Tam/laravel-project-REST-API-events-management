@@ -13,8 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('events', function (Blueprint $table) {
-            $table->id();
-
+            $table->id(); 
+ 
             $table->foreignIdFor(User::class);
             $table->string('name');
             $table->text('description')->nullable();
