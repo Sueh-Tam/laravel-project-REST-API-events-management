@@ -2,6 +2,8 @@
 
 namespace Tests;
 
+use App;
+use Event;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Application;
 
@@ -15,10 +17,9 @@ trait CreatesApplication
         $app = require __DIR__.'/../bootstrap/app.php';
 
         $app->make(Kernel::class)->bootstrap();
-        
         //return $this->assertFalse(true, 'This test fails intentionally.');
-        return $this->assertTrue(1==1, 'This test fails intentionally.');
+        $this->assertFalse(false, 'FALHOU COM SUCESSO');
         
-        //return $app;
+        return $app;
     }
 }
