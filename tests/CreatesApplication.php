@@ -18,7 +18,7 @@ trait CreatesApplication
 
         $app->make(Kernel::class)->bootstrap();
         //return $this->assertFalse(true, 'This test fails intentionally.');
-        $this->assertFalse(false, 'FALHOU COM SUCESSO');
+        $this->asserTrue(false, 'FALHOU COM SUCESSO');
         
         return $app;
     }
