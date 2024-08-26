@@ -17,9 +17,9 @@ trait CreatesApplication
         $app = require __DIR__.'/../bootstrap/app.php';
 
         $app->make(Kernel::class)->bootstrap();
-        $this->assertFalse(true, 'This test fails intentionally.');
-        //$this->asserTrue(true, 'SUCESSO');
-        
+        //$this->assertFalse(false, 'This test fails intentionally.');
+        $this->assertTrue(false, "deu bom, mas que bom");
+        $this->assertFalse(false,"deu ruim, mas que bom");
         return $app;
     }
 }
