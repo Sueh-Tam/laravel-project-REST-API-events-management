@@ -19,7 +19,7 @@ trait CreatesApplication
         $app->make(Kernel::class)->bootstrap();
         //$this->assertFalse(false, 'This test fails intentionally.');
         $this->assertTrue(false, "deu bom, mas que bom");
-        $this->assertFalse(false,"deu ruim, mas que bom");
+        //$this->assertFalse(false,"deu ruim, mas que bom");
         return $app;
     }
 }
